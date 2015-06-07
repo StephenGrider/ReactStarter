@@ -6,6 +6,9 @@ var watchify = require('watchify');
 var reactify = require('reactify');
 var notifier = require('node-notifier');
 var server = require('gulp-server-livereload');
+var concat = require('gulp-concat');
+var sass = require('gulp-sass');
+var watch = require('gulp-watch');
 
 var notify = function(error) {
   var message = 'In: ';
@@ -58,11 +61,26 @@ gulp.task('serve', function(done) {
       livereload: {
         enable: true,
         filter: function(filePath, cb) {
-          cb( /main.js/.test(filePath) )
+          if(/main.js/.test(filePath)) {
+            cb(true)
+          } else if(/style.css/.test(filePath)){
+            cb(true)
+          }
         }
       },
       open: true
     }));
 });
 
-gulp.task('default', ['build', 'serve']);
+gulp.task('sass', function () {
+  gulp.src('./sass/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(concat('style.css'))
+    .pipe(gulp.dest('./'));
+});
+
+gulp.task('default', ['build', 'serve', 'sass', 'watch']);
+
+gulp.task('watch', function () {
+  gulp.watch('./sass/**/*.scss', ['sass']);
+});
