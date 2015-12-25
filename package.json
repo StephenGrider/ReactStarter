@@ -17,7 +17,8 @@
     "gulp-util": "^3.0.4",
     "gulp-watch": "^4.2.4",
     "node-notifier": "^4.2.1",
-    "react": "^0.13.1",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
     "reactify": "^1.1.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^2.4.0"
