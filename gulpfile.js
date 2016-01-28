@@ -61,7 +61,7 @@ gulp.task('build', function() {
 gulp.task('compress', function() {
   return gulp.src('main.js')
     .pipe(uglify())
-    .pipe( rename( { suffix: '.min' } ) )
+    .pipe(rename({suffix:'.min'}))
     .pipe(gulp.dest('./'));
 });
 
