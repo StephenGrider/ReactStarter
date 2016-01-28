@@ -8,7 +8,10 @@ var notifier = require('node-notifier');
 var server = require('gulp-server-livereload');
 var concat = require('gulp-concat');
 var sass = require('gulp-sass');
+var cssnano = require('gulp-cssnano');
+var rename = require( 'gulp-rename' );
 var watch = require('gulp-watch');
+var uglify = require('gulp-uglify');
 
 var notify = function(error) {
   var message = 'In: ';
@@ -55,6 +58,13 @@ gulp.task('build', function() {
   bundle()
 });
 
+gulp.task('compress', function() {
+  return gulp.src('main.js')
+    .pipe(uglify())
+    .pipe(rename({suffix:'.min'}))
+    .pipe(gulp.dest('./'));
+});
+
 gulp.task('serve', function(done) {
   gulp.src('')
     .pipe(server({
@@ -76,10 +86,13 @@ gulp.task('sass', function () {
   gulp.src('./sass/**/*.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(concat('style.css'))
-    .pipe(gulp.dest('./'));
+    .pipe(gulp.dest('./'))
+    .pipe( cssnano() )
+    .pipe( rename( { suffix: '.min' } ) )
+    .pipe( gulp.dest( './' ) );
 });
 
-gulp.task('default', ['build', 'serve', 'sass', 'watch']);
+gulp.task('default', ['build', 'serve', 'compress', 'sass', 'watch']);
 
 gulp.task('watch', function () {
   gulp.watch('./sass/**/*.scss', ['sass']);
